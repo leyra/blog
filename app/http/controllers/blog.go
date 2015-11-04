@@ -26,10 +26,8 @@ type ViewTemplate struct {
 func (b Blog) List(c *echo.Context) error {
 	buff := new(bytes.Buffer)
 
-	db := app.S.DB
-
 	posts := model.Posts{}
-	db.Find(&posts)
+	app.S.DB.Find(&posts)
 
 	app.S.Template.ExecuteTemplate(buff, "list.html", ListTemplate{
 		Posts: posts,
@@ -41,10 +39,8 @@ func (b Blog) List(c *echo.Context) error {
 // View displays one blog post using the :id param passed through in the URL.
 // This displays both the title and body for a given post.
 func (b Blog) View(c *echo.Context) error {
-	db := app.S.DB
-
 	post := model.Post{}
-	db.First(&post, c.Param("id"))
+	app.S.DB.First(&post, c.Param("id"))
 
 	buff := new(bytes.Buffer)
 	app.S.Template.ExecuteTemplate(buff, "view.html", ViewTemplate{
