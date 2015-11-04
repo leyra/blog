@@ -2,9 +2,6 @@ package controller
 
 import (
 	"bytes"
-	"html/template"
-	"io/ioutil"
-	"log"
 	"net/http"
 
 	"gopkg.in/leyra/echo.v1"
@@ -16,70 +13,43 @@ import (
 type Blog struct {
 }
 
+type ListTemplate struct {
+	Posts model.Posts
+}
+
+type ViewTemplate struct {
+	Post model.Post
+}
+
 // List will list the title of each blog post with a link to then go on to view
 // the title and body of it using the view template.
 func (b Blog) List(c *echo.Context) error {
+	buff := new(bytes.Buffer)
+
 	db := app.S.DB
 
 	posts := model.Posts{}
 	db.Find(&posts)
 
-	html, err := ioutil.ReadFile("./app/views/blog/list.html")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	t, err := template.New("list").Parse(string(html))
-	buff := new(bytes.Buffer)
-
-	data := struct {
-		Posts model.Posts
-	}{
+	app.S.Template.ExecuteTemplate(buff, "list.html", ListTemplate{
 		Posts: posts,
-	}
+	})
 
-	err = t.Execute(buff, data)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Need to get all blog posts and list here
 	return c.HTML(http.StatusOK, buff.String())
 }
 
 // View displays one blog post using the :id param passed through in the URL.
 // This displays both the title and body for a given post.
 func (b Blog) View(c *echo.Context) error {
-	id := c.Param("id")
-
 	db := app.S.DB
+
 	post := model.Post{}
-
-	db.First(&post, id)
-
-	html, err := ioutil.ReadFile("./app/views/blog/view.html")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	t, err := template.New("view").Parse(string(html))
+	db.First(&post, c.Param("id"))
 
 	buff := new(bytes.Buffer)
-
-	data := struct {
-		Post model.Post
-	}{
+	app.S.Template.ExecuteTemplate(buff, "view.html", ViewTemplate{
 		Post: post,
-	}
-
-	err = t.Execute(buff, data)
-
-	if err != nil {
-		log.Fatal(err)
-	}
+	})
 
 	return c.HTML(http.StatusOK, buff.String())
 }
@@ -87,12 +57,10 @@ func (b Blog) View(c *echo.Context) error {
 // Create presents a form where the user can input the title and body of their
 // new blog post.
 func (b Blog) Create(c *echo.Context) error {
-	template, err := ioutil.ReadFile("./app/views/blog/create.html")
-	if err != nil {
-		panic(err)
-	}
+	buff := new(bytes.Buffer)
+	app.S.Template.ExecuteTemplate(buff, "create.html", nil)
 
-	return c.HTML(http.StatusOK, string(template))
+	return c.HTML(http.StatusOK, buff.String())
 }
 
 // Store saves the blog post.
