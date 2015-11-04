@@ -7,6 +7,7 @@ import (
 	"gopkg.in/leyra/echo.v1"
 
 	"leyra/app"
+	"leyra/app/jobs"
 	"leyra/app/models"
 )
 
@@ -61,14 +62,12 @@ func (b Blog) Create(c *echo.Context) error {
 
 // Store saves the blog post.
 func (b Blog) Store(c *echo.Context) error {
-	post := model.Post{
+	create := job.CreateBlogPost{
 		Title: c.Form("title"),
 		Body:  c.Form("body"),
 	}
 
-	db := app.S.DB
-	db.NewRecord(post)
-	db.Create(&post)
+	create.Handle()
 
 	return c.Redirect(http.StatusMovedPermanently, "/")
 }
