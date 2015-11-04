@@ -29,7 +29,7 @@ func (b Blog) List(c *echo.Context) error {
 	posts := model.Posts{}
 	app.S.DB.Find(&posts)
 
-	app.S.Template.ExecuteTemplate(buff, "list.html", ListTemplate{
+	app.S.Template.ExecuteTemplate(buff, "blog_list.html", ListTemplate{
 		Posts: posts,
 	})
 
@@ -43,7 +43,7 @@ func (b Blog) View(c *echo.Context) error {
 	app.S.DB.First(&post, c.Param("id"))
 
 	buff := new(bytes.Buffer)
-	app.S.Template.ExecuteTemplate(buff, "view.html", ViewTemplate{
+	app.S.Template.ExecuteTemplate(buff, "blog_view.html", ViewTemplate{
 		Post: post,
 	})
 
@@ -54,7 +54,7 @@ func (b Blog) View(c *echo.Context) error {
 // new blog post.
 func (b Blog) Create(c *echo.Context) error {
 	buff := new(bytes.Buffer)
-	app.S.Template.ExecuteTemplate(buff, "create.html", nil)
+	app.S.Template.ExecuteTemplate(buff, "blog_create.html", nil)
 
 	return c.HTML(http.StatusOK, buff.String())
 }
