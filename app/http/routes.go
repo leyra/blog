@@ -13,10 +13,16 @@ import (
 // all of this should work - for now it's fine though.
 func Route() *echo.Echo {
 	e := echo.New()
+
+	// Blog Controller
 	e.Get("/", routeBlogList)
 	e.Get("/new", routeBlogCreate)
 	e.Post("/new", routeBlogStore)
 	e.Get("/post/:id", routeBlogPost)
+
+	// Auth Controller
+	e.Get("/login", routeLoginForm)
+	e.Post("/login", routeLogin)
 
 	return e
 }
@@ -44,4 +50,21 @@ func routeBlogStore(c *echo.Context) error {
 
 func routeBlogPost(c *echo.Context) error {
 	return blogController().View(c)
+}
+
+// Inject an empty instance of bytes.Buffer into this controller as it's used
+// multiple times and makes the code a little bit cleaner.
+func authController() *controller.Auth {
+	c := new(controller.Auth)
+	c.Buffer = new(bytes.Buffer)
+
+	return c
+}
+
+func routeLoginForm(c *echo.Context) error {
+	return authController().LoginForm(c)
+}
+
+func routeLogin(c *echo.Context) error {
+	return authController().Login(c)
 }
