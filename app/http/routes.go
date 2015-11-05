@@ -1,6 +1,8 @@
 package http
 
 import (
+	"bytes"
+
 	"gopkg.in/leyra/echo.v1"
 
 	"leyra/app/http/controllers"
@@ -19,18 +21,27 @@ func Route() *echo.Echo {
 	return e
 }
 
+// Inject an empty instance of bytes.Buffer into this controller as it's used
+// multiple times and makes the code a little bit cleaner.
+func blogController() *controller.Blog {
+	c := new(controller.Blog)
+	c.Buffer = new(bytes.Buffer)
+
+	return c
+}
+
 func routeBlogList(c *echo.Context) error {
-	return new(controller.Blog).List(c)
+	return blogController().List(c)
 }
 
 func routeBlogCreate(c *echo.Context) error {
-	return new(controller.Blog).Create(c)
+	return blogController().Create(c)
 }
 
 func routeBlogStore(c *echo.Context) error {
-	return new(controller.Blog).Store(c)
+	return blogController().Store(c)
 }
 
 func routeBlogPost(c *echo.Context) error {
-	return new(controller.Blog).View(c)
+	return blogController().View(c)
 }

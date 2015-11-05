@@ -10,8 +10,8 @@ import (
 // on. By default an instance of gorm.DB will be put in here providing that
 // enable_database = "YES" in your ../etc/rc.conf file.
 type Store struct {
-	DB       gorm.DB
-	Template *template.Template
+	DB   gorm.DB
+	View *template.Template
 }
 
 // S provides a shortcut way of accessing the store from inside your

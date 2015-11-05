@@ -68,7 +68,7 @@ func main() {
 		return nil
 	})
 
-	app.S.Template = templates
+	app.S.View = templates
 
 	// Start application web server
 	app.Before()
