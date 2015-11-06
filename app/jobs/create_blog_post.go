@@ -6,15 +6,17 @@ import (
 )
 
 type CreateBlogPost struct {
-	Title string
-	Body  string
+	Title  string
+	Body   string
+	UserID int
 }
 
 func (cbp CreateBlogPost) Handle() {
 	// TODO: Validate these post fields here
 	post := model.Post{
-		Title: cbp.Title,
-		Body:  cbp.Body,
+		UserID: cbp.UserID,
+		Title:  cbp.Title,
+		Body:   cbp.Body,
 	}
 
 	db := app.S.DB

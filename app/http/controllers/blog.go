@@ -58,6 +58,10 @@ func (b *Blog) View(c *echo.Context) error {
 // Create presents a form where the user can input the title and body of their
 // new blog post.
 func (b Blog) Create(c *echo.Context) error {
+	if app.S.Get(c, "user") == nil {
+		return c.Redirect(http.StatusMovedPermanently, "/")
+	}
+
 	app.S.View.ExecuteTemplate(b.Buffer, "blog_create.html", nil)
 
 	return c.HTML(http.StatusOK, b.Buffer.String())
@@ -66,8 +70,9 @@ func (b Blog) Create(c *echo.Context) error {
 // Store saves the blog post.
 func (b Blog) Store(c *echo.Context) error {
 	create := job.CreateBlogPost{
-		Title: c.Form("title"),
-		Body:  c.Form("body"),
+		UserID: app.S.Get(c, "user").(int),
+		Title:  c.Form("title"),
+		Body:   c.Form("body"),
 	}
 
 	create.Handle()

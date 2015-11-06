@@ -7,6 +7,7 @@ import (
 	"gopkg.in/leyra/echo.v1"
 
 	"leyra/app"
+	"leyra/app/jobs"
 )
 
 // Auth represents an instance of the Auth Controller. In this case, an empty
@@ -33,5 +34,32 @@ func (a Auth) Login(c *echo.Context) error {
 // RegisterForm presents the user with a form containing the relevant fields to
 // register a new user to the site.
 func (a Auth) RegisterForm(c *echo.Context) error {
-	return c.HTML(http.StatusOK, "Register")
+	if app.S.Get(c, "user") != nil {
+		return c.Redirect(http.StatusMovedPermanently, "/")
+	}
+
+	app.S.View.ExecuteTemplate(a.Buffer, "auth_register.html", nil)
+
+	return c.HTML(http.StatusOK, a.Buffer.String())
+}
+
+func (a Auth) Register(c *echo.Context) error {
+	create := job.CreateUser{
+		FirstName: c.Form("first_name"),
+		LastName:  c.Form("last_name"),
+		Email:     c.Form("email"),
+		Password:  c.Form("password"),
+	}
+
+	user := create.Handle()
+
+	app.S.Set(c, "user", user.ID)
+
+	return c.Redirect(http.StatusMovedPermanently, "/")
+}
+
+func (a Auth) Logout(c *echo.Context) error {
+	app.S.Set(c, "user", nil)
+
+	return c.Redirect(http.StatusMovedPermanently, "/")
 }

@@ -13,7 +13,10 @@ import (
 func Before() {
 	fmt.Printf("Starting your application...\n")
 
-	S.DB.AutoMigrate(&model.Post{})
+	S.DB.AutoMigrate(
+		&model.Post{},
+		&model.User{},
+	)
 }
 
 // After fires just after the application's web server has been started.

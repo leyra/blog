@@ -24,6 +24,11 @@ func Route() *echo.Echo {
 	e.Get("/login", routeLoginForm)
 	e.Post("/login", routeLogin)
 
+	e.Get("/register", routeRegisterForm)
+	e.Post("/register", routeRegister)
+
+	e.Get("/logout", routeLogout)
+
 	return e
 }
 
@@ -67,4 +72,16 @@ func routeLoginForm(c *echo.Context) error {
 
 func routeLogin(c *echo.Context) error {
 	return authController().Login(c)
+}
+
+func routeRegisterForm(c *echo.Context) error {
+	return authController().RegisterForm(c)
+}
+
+func routeRegister(c *echo.Context) error {
+	return authController().Register(c)
+}
+
+func routeLogout(c *echo.Context) error {
+	return authController().Logout(c)
 }
