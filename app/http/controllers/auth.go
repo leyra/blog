@@ -26,6 +26,7 @@ func (a *Auth) LoginForm(c *echo.Context) error {
 // Login will check to see if the credentials are correct then proceed to log
 // the user in if possible.
 func (a Auth) Login(c *echo.Context) error {
+
 	return c.HTML(http.StatusOK, "Logged in")
 }
 
