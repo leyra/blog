@@ -28,7 +28,20 @@ func (a *Auth) LoginForm(c *echo.Context) error {
 // the user in if possible.
 func (a Auth) Login(c *echo.Context) error {
 
-	return c.HTML(http.StatusOK, "Logged in")
+	authenticate := job.AuthenticateUser{
+		c.Form("email"),
+		c.Form("password"),
+	}
+
+	userID := authenticate.Handle()
+
+	if userID == 0 {
+		return c.Redirect(http.StatusMovedPermanently, "/login")
+	}
+
+	app.S.Set(c, "user", userID)
+
+	return c.Redirect(http.StatusMovedPermanently, "/")
 }
 
 // RegisterForm presents the user with a form containing the relevant fields to
@@ -43,6 +56,8 @@ func (a Auth) RegisterForm(c *echo.Context) error {
 	return c.HTML(http.StatusOK, a.Buffer.String())
 }
 
+// Register collects the form data from the registration form and attempts to
+// create a user using these credentials.
 func (a Auth) Register(c *echo.Context) error {
 	create := job.CreateUser{
 		FirstName: c.Form("first_name"),
@@ -58,6 +73,7 @@ func (a Auth) Register(c *echo.Context) error {
 	return c.Redirect(http.StatusMovedPermanently, "/")
 }
 
+// Logout clears the user's session "user" data.
 func (a Auth) Logout(c *echo.Context) error {
 	app.S.Set(c, "user", nil)
 

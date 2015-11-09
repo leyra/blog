@@ -52,6 +52,9 @@ func (b *Blog) View(c *echo.Context) error {
 		Post: post,
 	})
 
+	user := model.User{}
+	app.S.DB.Where("id = ?", app.S.Get(c, "user")).First(&user)
+
 	return c.HTML(http.StatusOK, b.Buffer.String())
 }
 
