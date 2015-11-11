@@ -1,11 +1,39 @@
 {{ template "start" }}
-<div>
-	<form action="/register" method="post">
-		First Name: <input type="text" name="first_name" /><br />
-		Last Name: <input type="text" name="last_name" /><br />
-		Email: <input type="email" name="email" /><br />
-		Password: <input type="password" name="password" /><br />
-		<input type="submit" />
-	</form>
-</div>
+	<div class="row">
+		<div class="large-3 columns">
+			<h3>Register</h3>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="large-6 columns">
+			<p>
+				This is an example web application built using Leyra. It's just
+				a small blog-like application which supports using a database,
+				templates, sessions etc...
+			</p>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="large-3 columns">
+			<form action="/register" method="post">
+				<div class="row">
+					First Name: <input type="text" name="first_name" />
+				</div>
+				<div class="row">
+					Last Name: <input type="text" name="last_name" />
+				</div>
+				<div class="row">
+					Email: <input type="email" name="email" />
+				</div>
+				<div class="row">
+					Password: <input type="password" name="password" />
+				</div>
+				<div class="row">
+					<button type="submit" />Register</button>
+				</div>
+			</form>
+		</div>
+	</div>
 {{ template "end" }}
