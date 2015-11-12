@@ -21,6 +21,7 @@ type Blog struct {
 // blog_list.html template.
 type ListTemplate struct {
 	Posts model.Posts
+	Auth  interface{}
 }
 
 // ViewTemplate represents the data structure that will be passed through to the
@@ -37,6 +38,7 @@ func (b *Blog) List(c *echo.Context) error {
 
 	app.S.View.ExecuteTemplate(b.Buffer, "blog_list.html", ListTemplate{
 		Posts: posts,
+		Auth:  app.S.Get(c, "user"),
 	})
 
 	return c.HTML(http.StatusOK, b.Buffer.String())

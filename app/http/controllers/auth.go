@@ -27,7 +27,6 @@ func (a *Auth) LoginForm(c *echo.Context) error {
 // Login will check to see if the credentials are correct then proceed to log
 // the user in if possible.
 func (a Auth) Login(c *echo.Context) error {
-
 	authenticate := job.AuthenticateUser{
 		c.Form("email"),
 		c.Form("password"),
@@ -68,7 +67,7 @@ func (a Auth) Register(c *echo.Context) error {
 
 	user := create.Handle()
 
-	app.S.Set(c, "user", user.ID)
+	app.S.Set(c, "user", user)
 
 	return c.Redirect(http.StatusMovedPermanently, "/")
 }

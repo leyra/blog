@@ -6,6 +6,8 @@ import (
 	"gopkg.in/leyra/echo.v1"
 	"gopkg.in/leyra/gorm.v1"
 	"gopkg.in/leyra/sessions.v1"
+
+	"leyra/app/models"
 )
 
 // Store is a place where you can pub various dependencies for easy access later
@@ -18,6 +20,9 @@ type Store struct {
 
 	Set func(c *echo.Context, key string, value interface{})
 	Get func(c *echo.Context, key string) interface{}
+
+	// Custom fields
+	User model.User
 }
 
 // S provides a shortcut way of accessing the store from inside your

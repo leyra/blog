@@ -19,9 +19,11 @@
 				<a href="/register">register</a> a new one.
 			</p>
 
-			<p>
-			<a href="/new">Create a new post</a>
-			</p>
+			{{ if .Auth }}
+				<p>
+					<a href="/new">Create a new post</a>
+				</p>
+			{{ end }}
 		</div>
 	</div>
 
