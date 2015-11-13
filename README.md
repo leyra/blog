@@ -1,4 +1,4 @@
-### Blog
+# Blog
 
 I'll come up with a better name for this eventually. This is pretty much an
 example web application using [Leyra](https://github.com/leyra/leyra). It's
