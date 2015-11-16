@@ -12,16 +12,15 @@
 				a small blog-like application which supports using a database,
 				templates, sessions etc...
 			</p>
-
-			<p>
-				You must <a href="/login">login</a> to create a new post. If you
-				don't already have an account you can
-				<a href="/register">register</a> a new one.
-			</p>
-
 			{{ if .Auth }}
 				<p>
 					<a href="/new">Create a new post</a>
+				</p>
+			{{else}}
+				<p>
+					You must <a href="/login">login</a> to create a new post. If you
+					don't already have an account you can
+					<a href="/register">register</a> a new one.
 				</p>
 			{{ end }}
 		</div>

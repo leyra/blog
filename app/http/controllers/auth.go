@@ -13,6 +13,7 @@ import (
 // Auth represents an instance of the Auth Controller. In this case, an empty
 // buffer is created as the routes are being setup for funcs in this controller.
 type Auth struct {
+	Controller
 	Buffer *bytes.Buffer
 }
 
@@ -32,7 +33,7 @@ func (a Auth) Login(c *echo.Context) error {
 		c.Form("password"),
 	}
 
-	userID := authenticate.Handle()
+	userID := authenticate.Handle().ID
 
 	if userID == 0 {
 		return c.Redirect(http.StatusMovedPermanently, "/login")
@@ -46,7 +47,7 @@ func (a Auth) Login(c *echo.Context) error {
 // RegisterForm presents the user with a form containing the relevant fields to
 // register a new user to the site.
 func (a Auth) RegisterForm(c *echo.Context) error {
-	if app.S.Get(c, "user") != nil {
+	if IsAuthenticated(c) {
 		return c.Redirect(http.StatusMovedPermanently, "/")
 	}
 

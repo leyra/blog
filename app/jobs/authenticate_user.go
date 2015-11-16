@@ -10,7 +10,7 @@ type AuthenticateUser struct {
 	Password string
 }
 
-func (au AuthenticateUser) Handle() int {
+func (au AuthenticateUser) Handle() model.User {
 	// TODO: Validate these post fields here
 	user := model.User{}
 
@@ -20,5 +20,5 @@ func (au AuthenticateUser) Handle() int {
 		au.Password,
 	).First(&user)
 
-	return user.ID
+	return user
 }

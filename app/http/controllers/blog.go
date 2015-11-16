@@ -14,6 +14,7 @@ import (
 // Blog represents an instance of the Blog Controller. In this case, an empty
 // buffer is created as the routes are being setup for funcs in this controller.
 type Blog struct {
+	Controller
 	Buffer *bytes.Buffer
 }
 
@@ -54,16 +55,13 @@ func (b *Blog) View(c *echo.Context) error {
 		Post: post,
 	})
 
-	user := model.User{}
-	app.S.DB.Where("id = ?", app.S.Get(c, "user")).First(&user)
-
 	return c.HTML(http.StatusOK, b.Buffer.String())
 }
 
 // Create presents a form where the user can input the title and body of their
 // new blog post.
 func (b Blog) Create(c *echo.Context) error {
-	if app.S.Get(c, "user") == nil {
+	if IsAuthenticated(c) {
 		return c.Redirect(http.StatusMovedPermanently, "/")
 	}
 
