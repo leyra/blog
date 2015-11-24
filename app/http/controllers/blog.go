@@ -61,7 +61,7 @@ func (b *Blog) View(c *echo.Context) error {
 // Create presents a form where the user can input the title and body of their
 // new blog post.
 func (b Blog) Create(c *echo.Context) error {
-	if IsAuthenticated(c) {
+	if !IsAuthenticated(c) {
 		return c.Redirect(http.StatusMovedPermanently, "/")
 	}
 

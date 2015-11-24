@@ -68,7 +68,7 @@ func (a Auth) Register(c *echo.Context) error {
 
 	user := create.Handle()
 
-	app.S.Set(c, "user", user)
+	app.S.Set(c, "user", user.ID)
 
 	return c.Redirect(http.StatusMovedPermanently, "/")
 }
